@@ -77,18 +77,18 @@ def lambda_handler(event, context):
             
             thumbnails_created.append(thumbnail_key)
             print(f"Created thumbnail: {thumbnail_key}")
-            
-            sqs_client.send_message(
-            QueueUrl=os.environ['SQS_QUEUE_URL'],
-            MessageBody=json.dumps({
-                'bucket': bucket,
-                'original_key': key,
-                'thumbnail_keys': {
-                    size: key.replace('/original/', f'/thumbnails/{size}/')
-                    for size in THUMBNAIL_SIZES
-                }
-            })
-        )
+
+        sqs_client.send_message(
+        QueueUrl=os.environ['SQS_QUEUE_URL'],
+        MessageBody=json.dumps({
+            'bucket': bucket,
+            'original_key': key,
+            'thumbnail_keys': {
+                size: key.replace('/original/', f'/thumbnails/{size}/')
+                for size in THUMBNAIL_SIZES
+            }
+        })
+    )
 
         
         return {
